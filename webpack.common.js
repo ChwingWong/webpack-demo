@@ -1,20 +1,30 @@
 const path = require('path');
+const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
         index: './src/index.js',
+        vendor: [
+            'lodash'
+        ]
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
-            title: 'Code Splitting'
+            title: 'Caching'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest'
         })
     ],
     output: {
-        filename: '[name].bundle.js',
-        chunkFilename: '[name].bundle.js',
+        filename: '[name].[chunkhash].bundle.js',
+        chunkFilename: '[name].[chunkhash].bundle.js',
         path: path.resolve(__dirname, 'dist')
     }
 };
